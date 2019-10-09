@@ -15,12 +15,22 @@
 
     </head>
     <body>
-        <nav class="navbar navbar-expand-sm bg-light navbar-light">
+          <nav class="navbar navbar-expand-sm bg-light navbar-light">
                 <!-- Brand -->
                 <a class = "navbar-brand" href="{% url 'home' %}">
                     <img src="{% static 'Logo.png' %}" alt="" style="max-height:50px;" />
                 </a>
                 <!-- Links -->
+                <ul class ="nav navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'Analyser:home' %}">Analyze</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'Dashboard:home' %}">Dashboard</a>
+                        </li>
+                    {% endif %}
+                </ul>
                 <ul class="nav navbar-nav ml-auto" style="padding-right: 7%;">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -35,8 +45,7 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="{% url 'home' %}"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                             {% if user.is_authenticated %}
-                                    <a class="dropdown-item" href="{% url 'Accounts:profile' %}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
-                                    <a class="dropdown-item" href="{% url 'Analyser:analyser-home' %}"><i class="fa fa-sign-out" aria-hidden="true"></i> Analyse </a>
+                                    <a class="dropdown-item" href="{% url 'Accounts:profile' %}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>  
                                     <a class="dropdown-item" href="{% url 'Accounts:logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout </a>
                             {% else %}
                                     <a class="dropdown-item" href="{% url 'Accounts:login' %}"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
@@ -48,10 +57,15 @@
                 </ul>
               </nav>
         <!-- <div class="container" style="width: 100%;"> -->
+            qwerty
+            qwert@1234
             {% block content %}
             {% endblock %}
         <!-- </div> -->
     </body>
 </html>
+
+
+
 
 
