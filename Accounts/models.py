@@ -18,10 +18,10 @@ class Profile(models.Model):
 		self.Profile_Pic.delete()
 		super().delete(*args, **kwargs)
 
-	# def save(self):
-	# 	super().save()
-	# 	img = Image.open(self.image.path)
-	# 	if img.height > 300 or img.width > 300:
-	# 		output_size = (300, 300)
-	# 		img.thumbnail(output_size)
-	# 		img.save(self.image.path)
+class HashtagProfile(models.Model):
+	Username = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
+	Hashtag_Searched = models.CharField(max_length=100)
+
+class FeedbackProfile(models.Model):
+	Username = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
+	Feedback = models.CharField(max_length=300)

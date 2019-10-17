@@ -19,4 +19,6 @@ from . import views
 app_name = "Analyser"
 urlpatterns = [
 	path('', views.home, name="home"),
+	path('analyseTweets', views.analyseTweets , name="analyseTweets"),
+	path('showTweets', views.showTweets, name="showTweets"),
 ]
