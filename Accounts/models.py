@@ -21,7 +21,9 @@ class Profile(models.Model):
 class HashtagProfile(models.Model):
 	Username = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
 	Hashtag_Searched = models.CharField(max_length=100)
+	FeedbackToHashtag = models.CharField(max_length=300, default='before')
 
 class FeedbackProfile(models.Model):
 	Username = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
 	Feedback = models.CharField(max_length=300)
+	HashtagToFeedback = models.CharField(max_length=100, default='before')

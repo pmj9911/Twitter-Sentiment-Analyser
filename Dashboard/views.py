@@ -17,7 +17,8 @@ def feedback(request):
 		    instance.Username = request.user
 		    instance.save()
 		    feedbacks = FeedbackProfile.objects.all()
-		    return render (request,'Dashboard/showFeedback.html',{'feedbacks':feedbacks})
+		    tweets = HashtagProfile.objects.all()#get(Username=request.user)
+		    return render (request,'Dashboard/showFeedback.html',{'feedbacks':feedbacks,'tweets':tweets})
 	else:
 		form = forms.feedbackForm()
 	return render(request,'Dashboard/feedback.html',{'form':form})
