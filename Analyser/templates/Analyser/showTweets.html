@@ -2,4 +2,8 @@
 
 {% block content %}
 		<h1>This is the {{ tweet }} for the analyser module</h1>
+		<p> do you want to give feedback?</p>
+		<a href=" {% url 'Dashboard:feedback' %}">click here!</a>
+ 
+
 {% endblock %}	

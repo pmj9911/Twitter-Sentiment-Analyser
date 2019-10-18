@@ -19,4 +19,5 @@ from . import views
 app_name = "Dashboard"
 urlpatterns = [
 	path('', views.home, name="home"),
+	path('feedback/', views.feedback, name="feedback"),
 ]
