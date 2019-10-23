@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import  AuthenticationForm
 from . import forms
@@ -10,7 +11,13 @@ import tweepy
 import nltk
 from nltk.corpus import stopwords
 from nltk import word_tokenize
-
+import pandas as pd
+import numpy as np
+import matplotlib
+matplotlib.use("agg")
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure
+import seaborn as sns
 
 def preprocess_tweet(text):
 
@@ -65,6 +72,7 @@ def classifyTweet(tweet_polarity):
 
 @login_required(login_url="/Accounts/login/")
 def analyseTweets(request,hashtag):
+	
 	# accept the tweet as an input here and then apply ml on it and send a list of context with the results.
 	tweet = hashtag
 	consumer_key = "Qqu3s8I0OWEpxC4cbbCC2Bh8D" 
@@ -78,6 +86,7 @@ def analyseTweets(request,hashtag):
     # print("number of tweets extracted: " + str(len(public_tweets)))
     # print(len(public_tweets))
 	polarityIndividual = {}
+	polarityValues = []
 	if len(public_tweets)!=0:
 		total_polarity=0
 		for tweet in public_tweets:
@@ -89,7 +98,9 @@ def analyseTweets(request,hashtag):
             # print(tweet_string)
 			analysis = TextBlob(tweet_string)
             # print(analysis.sentiment.polarity)
-			polarityIndividual[currentTweet] = classifyTweet(analysis.sentiment.polarity)
+			answer = classifyTweet(analysis.sentiment.polarity)
+			polarityValues.append(answer) 
+			polarityIndividual[currentTweet] = answer 
 			total_polarity=total_polarity+analysis.sentiment.polarity
             # print("\n")
 			tweet_polarity=total_polarity/len(public_tweets)
@@ -104,12 +115,40 @@ def analyseTweets(request,hashtag):
 		polarityResult = "No tweets found for this search"
 		tweet_polarity = None
 		polarityIndividual["No tweet"] = "No tweet"
+		
+	df=pd.DataFrame() 
+	figNameBarchart = "media/GraphPics/Barchart" + hashtag + '.png'
+	df['Polarity']=polarityValues
+	figure(num=None, figsize=(12, 6))
+	y = df.groupby(['Polarity'])['Polarity'].agg(np.size).values
+	x = df.groupby(['Polarity'])['Polarity'].agg(np.size).index
+	hello=sns.barplot(x=x, y=y, data=df)
+	fig = hello.get_figure()
+	fig.savefig(figNameBarchart)
+
+	# os.rename("../" + figNameBarchart, "/media/ProfilePics/"+figNameBarchart)
+
+
+	plt.clf()
+	figNamePiechart =  "media/GraphPics/PieChart/" + hashtag + '.jpg'
+	neg=len(df[df['Polarity'] == 'Negative'])
+	pos=len(df[df['Polarity'] == 'Positive'])
+	n=len(df[df['Polarity'] == 'Neutral'])
+	labels = 'Positive', 'Negative', 'Neutral'
+	sizes = [pos,neg,n]
+	colors = ['green', 'darkblue','orange']
+	plt.pie(sizes, labels=labels, colors=colors,autopct='%1.1f%%', shadow=True, startangle=140)
+	plt.axis('equal')	
+	plt.savefig(figNamePiechart)
+
 	return render(request,'Analyser/showTweets.html', 
 							{
 								'hashtag':hashtag,
 								'polarityResult' : polarityResult,
 								'tweet_polarity' : tweet_polarity,
-								'polarityIndividual' : polarityIndividual
+								'polarityIndividual' : polarityIndividual,
+								'figNameBarchart':figNameBarchart,
+								'figNamePiechart':figNamePiechart
 							})
 
 @login_required(login_url="/Accounts/login/")

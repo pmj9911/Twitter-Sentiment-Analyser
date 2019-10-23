@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -26,4 +27,5 @@ class HashtagProfile(models.Model):
 class FeedbackProfile(models.Model):
 	Username = models.ForeignKey(User, default=None, on_delete=models.PROTECT)
 	Feedback = models.CharField(max_length=300)
+	Rating = models.PositiveIntegerField(default=0,validators=[MaxValueValidator(5)])
 	HashtagToFeedback = models.CharField(max_length=100, default='before')

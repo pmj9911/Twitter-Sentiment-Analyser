@@ -4,4 +4,4 @@ from django.contrib.auth.models import User
 class feedbackForm(forms.ModelForm):
 	class Meta:
 		model = models.FeedbackProfile
-		fields = ['Feedback']
+		fields = ['Feedback','Rating']
